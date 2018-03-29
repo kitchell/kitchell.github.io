@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>White Matter of the Human Brain</title>
+        <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+                <style>
+                    body {
+                        font-family: Monospace;
+                        background-color: #000;
+                        color: #fff;
+                        margin: 0px;
+                        overflow: hidden;
+                    }
+                #info {
+                    color: #fff;
+                    position: absolute;
+                    top: 10px;
+                    width: 100%;
+                    text-align: center;
+                    z-index: 100;
+                    display:block;
+                }
+                #info a {
+                    color: #046;
+                    font-weight: bold;
+                }
+                </style>
+                </head>
+    
+    <body>
+        <div id="info">
+            White Matter Tracts of the Human Brain
+        </div>
+        
+
+        <script src="js/three.js"></script>
+        
+        <script src="js/OrbitControls.js"></script>
+        
+        <script src="js/Detector.js"></script>
+<!-- 
+        <script src="js/Tween.js"></script> -->
+
+        <script src="js/dat.gui.min.js"></script>
+
+        
+        <script>
+            if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+            var container,controls;
+            var camera, scene, renderer, light;
+            var clock = new THREE.Clock();
+
+            // var implode = true;
+            // var explode = false;
+            
+            // tract names
+            //var cfma, cfmi, larc, lcc, lslf;
+            init();
+
+            animate(); 
+            //implode_meshes();
+            //explode_meshes();
+
+            function init() {
+                container = document.createElement( 'div' );
+                document.body.appendChild( container );
+                camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+                //camera.position.set( 300, 100, 100 );
+                camera.position.y = 250;
+                
+                
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color( 0x333333 );
+
+                light = new THREE.AmbientLight( 0xffffff, .6 );
+                light.position.set( -0.66, -32.8, 7.5)
+                scene.add( light );
+                light = new THREE.DirectionalLight( 0xffffff, .6 );
+                light.position.set( -1.85, 10, 7.5 );
+                scene.add( light );
+                light = new THREE.DirectionalLight( 0xffffff, .6 );
+                light.position.set( -.66, -32.8, 7.5 );
+                scene.add( light );
+
+
+                var gui = new dat.GUI({ width: 450 });
+               
+                var props = {
+                    cfmavis: 1,
+                    cfmivis: 1,
+                    arcvis: 1,
+                    ccvis: 1,
+                    chvis: 1,
+                    slfvis: 1,
+                    ifofvis: 1,
+                    ilfvis: 1,
+                    uvis: 1,
+                    csvis: 1,
+                    trvis: 1,
+                    lpialvis: .3,
+                    rpialvis: .3,
+                    };
+                // var gui = new dat.GUI({ width: 350 });
+
+                var loader = new THREE.JSONLoader();
+                //load all models here
+
+                loader.load('models/cfma.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var cfma = new THREE.Mesh( geometry, material );
+                    scene.add( cfma );
+                    cfma.material.transparent = true;
+                    cfma.material.opacity = 1;
+                    gui.add(props, 'cfmavis', 0, 1).name('Callosum Forceps Major').onChange(function(opval) {
+                cfma.material.opacity = opval;
+                 if ( opval < .12 ) {
+                    cfma.visible = false;
+                } else { cfma.visible = true; 
+                }
+               });
+                    
+
+                //     document.getElementById( "cfmaButtonId" ).addEventListener("click", function(){
+                // cfma.visible = !cfma.visible;
+            //});
+                });
+                loader.load('models/cfmi.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var cfmi = new THREE.Mesh( geometry, material );
+                    scene.add( cfmi );
+                    cfmi.material.transparent = true;
+                    cfmi.material.opacity = 1;
+                    gui.add(props, 'cfmivis', 0, 1).name('Callosum Forceps Minor').onChange(function(opval) {
+                cfmi.material.opacity = opval;
+                 if ( opval < .12 ) {
+                    cfmi.visible = false;
+                } else { cfmi.visible = true; 
+                }
+               });
+                    });
+
+            loader.load('models/Larc.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var larc = new THREE.Mesh( geometry, material );
+                    scene.add( larc );
+                    larc.material.transparent = true;
+                    larc.material.opacity = 1;
+                    
+
+                loader.load('models/rarc.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var rarc = new THREE.Mesh( geometry, material );
+                    scene.add( rarc );
+                    rarc.material.transparent = true;
+                    rarc.material.opacity = 1;
+
+                    gui.add(props, 'arcvis', 0, 1).name('Arcuate Fasiculus').onChange(function(opval) {
+                larc.material.opacity = opval;
+                rarc.material.opacity = opval;
+                 if ( opval < .12 ) {
+                    larc.visible = false;
+                    rarc.visible = false;
+                } else { larc.visible = true; 
+                    rarc.visible = true;
+                }
+               });
+                
+});
+                });
+
+
+                loader.load('models/LCC.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var lcc = new THREE.Mesh( geometry, material );
+                    scene.add( lcc );
+                    lcc.material.transparent = true;
+                    lcc.material.opacity = 1;
+
+                    loader.load('models/rcc.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var rcc = new THREE.Mesh( geometry, material );
+                    scene.add( rcc );
+                    rcc.material.transparent = true;
+                    rcc.material.opacity = 1;
+
+                
+                    gui.add(props, 'ccvis', 0, 1).name('Cingulum Cingulate').onChange(function(opval) {
+                lcc.material.opacity = opval;
+                rcc.material.opacity = opval;
+                  if ( opval < .12 ) {
+                    lcc.visible = false;
+                    rcc.visible = false;
+                } else { lcc.visible = true; 
+                    rcc.visible = true;
+                }
+
+                });
+               });
+                    
+    
+                });
+
+                loader.load('models/Lslf.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var lslf = new THREE.Mesh( geometry, material );
+                    scene.add( lslf );
+                    lslf.material.transparent = true;
+                    lslf.material.opacity = 1;
+                    loader.load('models/rslf.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var rslf = new THREE.Mesh( geometry, material );
+                    scene.add( rslf );
+                    rslf.material.transparent = true;
+                    rslf.material.opacity = 1;
+                    gui.add(props, 'slfvis', 0, 1).name('Sup. Longitudinal Fasiculus').onChange(function(opval) {
+                lslf.material.opacity = opval;
+                rslf.material.opacity = opval;
+                  if ( opval < .12 ) {
+                    lslf.visible = false;
+                    rslf.visible = false;
+                } else { lslf.visible = true; 
+                    rslf.visible = true;
+                }
+                });
+                    loader.load('models/lhpial.json', function (geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var lhpial = new THREE.Mesh( geometry, material );
+                    scene.add( lhpial );
+                    //lhpial.material.transparent = true;
+                    gui.add(props, 'lpialvis', 0, .7).name('Left Cortical Hemisphere').onChange(function(opval) {
+                lhpial.material.opacity = opval;
+                
+                if ( opval < .1 ) {
+                    lhpial.visible = false;
+                    
+                } else { lhpial.visible = true; 
+                    
+                }
+                });
+                });
+
+                loader.load('models/rhpial.json', function (geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var rhpial = new THREE.Mesh( geometry, material );
+                    scene.add( rhpial );
+                    
+                    gui.add(props, 'rpialvis', 0, .7).name('Right Cortical Hemisphere').onChange(function(opval) {
+                rhpial.material.opacity = opval;
+                
+                if ( opval < .1 ) {
+                    rhpial.visible = false;
+                    
+                } else { rhpial.visible = true; 
+                    
+                }
+                });
+                });
+
+                
+
+                });
+                    
+                });
+
+                loader.load('models/lifof.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var lifof = new THREE.Mesh( geometry, material );
+                    scene.add( lifof );
+                    lifof.material.transparent = true;
+                    lifof.material.opacity = 1;
+                    
+
+                loader.load('models/rifof.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var rifof = new THREE.Mesh( geometry, material );
+                    scene.add( rifof );
+                    rifof.material.transparent = true;
+                    rifof.material.opacity = 1;
+                    gui.add(props, 'ifofvis', 0, 1).name('Inf. Fronto-Occipital Fasiculus').onChange(function(opval) {
+                lifof.material.opacity = opval;
+                rifof.material.opacity = opval;
+                  if ( opval < .12 ) {
+                    lifof.visible = false;
+                    rifof.visible = false;
+                } else { lifof.visible = true; 
+                    rifof.visible = true;
+                }
+                });
+                });
+                });
+
+                loader.load('models/lcs.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var lcs = new THREE.Mesh( geometry, material );
+                    scene.add( lcs );
+                    lcs.material.transparent = true;
+                    lcs.material.opacity = 1;
+                    loader.load('models/rcs.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var rcs = new THREE.Mesh( geometry, material );
+                    scene.add( rcs );
+                    rcs.material.transparent = true;
+                    rcs.material.opacity = 1;
+                    gui.add(props, 'csvis', 0, 1).name('Corticospinal Tract').onChange(function(opval) {
+                lcs.material.opacity = opval;
+                rcs.material.opacity = opval;
+                  if ( opval < .12 ) {
+                    lcs.visible = false;
+                    rcs.visible = false;
+                } else { lcs.visible = true; 
+                    rcs.visible = true;
+                }
+                });
+                });
+                    
+                });
+
+                loader.load('models/lch.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var lch = new THREE.Mesh( geometry, material );
+                    scene.add( lch );
+                    lch.material.transparent = true;
+                    lch.material.opacity = 1;
+
+                    loader.load('models/rch.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var rch = new THREE.Mesh( geometry, material );
+                    scene.add( rch );
+                    rch.material.transparent = true;
+                    rch.material.opacity = 1;
+
+                    gui.add(props, 'chvis', 0, 1).name('Cingulum Hippocampus').onChange(function(opval) {
+                lch.material.opacity = opval;
+                rch.material.opacity = opval;
+                  if ( opval < .12 ) {
+                    lch.visible = false;
+                    rch.visible = false;
+                } else { lch.visible = true; 
+                    rch.visible = true;
+                }
+                });
+                });
+                });
+
+                loader.load('models/lilf.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var lilf = new THREE.Mesh( geometry, material );
+                    scene.add( lilf );
+                    lilf.material.transparent = true;
+                    lilf.material.opacity = 1;
+                    loader.load('models/rilf.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var rilf = new THREE.Mesh( geometry, material );
+                    scene.add( rilf );
+                    rilf.material.transparent = true;
+                    rilf.material.opacity = 1;
+                    gui.add(props, 'ilfvis', 0, 1).name('Inf. Longitudinal Fasiculus').onChange(function(opval) {
+                lilf.material.opacity = opval;
+                rilf.material.opacity = opval;
+                  if ( opval < .12) {
+                    lilf.visible = false;
+                    rilf.visible = false;
+                } else { lilf.visible = true; 
+                    rilf.visible = true;
+                }
+                });
+                });
+
+                });
+
+                loader.load('models/ltr.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var ltr = new THREE.Mesh( geometry, material );
+                    scene.add( ltr );
+                    ltr.material.transparent = true;
+                    ltr.material.opacity = 1;
+
+                    loader.load('models/rtr.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var rtr = new THREE.Mesh( geometry, material );
+                    scene.add( rtr );
+                    rtr.material.transparent = true;
+                    rtr.material.opacity = 1;
+                    gui.add(props, 'trvis', 0, 1).name('Thalamic Radiation').onChange(function(opval) {
+                ltr.material.opacity = opval;
+                rtr.material.opacity = opval;
+                  if ( opval < .12 ) {
+                    ltr.visible = false;
+                    rtr.visible = false;
+                } else { ltr.visible = true; 
+                    rtr.visible = true;
+                }
+                });
+
+                });
+                });
+
+                loader.load('models/lu.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var lu = new THREE.Mesh( geometry, material );
+                    scene.add( lu );
+                    lu.material.transparent = true;
+                    lu.material.opacity = 1;
+                    
+
+                    loader.load('models/ru.json', function( geometry, materials ) {
+
+                    var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                    var ru = new THREE.Mesh( geometry, material );
+                    scene.add( ru );
+                    ru.material.transparent = true;
+                    ru.material.opacity = 1;
+
+                    gui.add(props, 'uvis', 0, 1).name('Uncinate Fasiculus').onChange(function(opval) {
+                lu.material.opacity = opval;
+                ru.material.opacity = opval;
+                if ( opval < .12 ) {
+                    lu.visible = false;
+                    ru.visible = false;
+                } else { lu.visible = true; 
+                    ru.visible = true;
+                }
+                });
+                });
+
+
+                });
+
+                // loader.load('models/lhpial_1.json', function (geometry, materials ) {
+
+                //     var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                //     var lhpial = new THREE.Mesh( geometry, material );
+                //     scene.add( lhpial );
+                //     //lhpial.material.transparent = true;
+                //     gui.add(props, 'lpialvis', 0, .5).name('Left Cortical Hemisphere').onChange(function(opval) {
+                // lhpial.material.opacity = opval;
+                
+                // if ( opval < .1 ) {
+                //     lhpial.visible = false;
+                    
+                // } else { lhpial.visible = true; 
+                    
+                // }
+                // });
+                // });
+
+                // loader.load('models/rhpial_1.json', function (geometry, materials ) {
+
+                //     var material = new THREE.MeshLambertMaterial(materials[ 0 ]);
+                //     var rhpial = new THREE.Mesh( geometry, material );
+                //     scene.add( rhpial );
+                //     //lhpial.material.transparent = true;
+                //     gui.add(props, 'rpialvis', 0, .5).name('Right Cortical Hemisphere').onChange(function(opval) {
+                // rhpial.material.opacity = opval;
+                
+                // if ( opval < .1 ) {
+                //     rhpial.visible = false;
+                    
+                // } else { rhpial.visible = true; 
+                    
+                // }
+                // });
+                // });
+
+
+                //end model loading
+                // get initial position in the world
+
+
+                renderer = new THREE.WebGLRenderer();
+                renderer.setPixelRatio( window.devicePixelRatio );
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                renderer.shadowMap.enabled = true;
+                //renderer.sortObjects = false;
+                container.appendChild( renderer.domElement );
+                window.addEventListener( 'resize', onWindowResize, false );
+                
+                controls = new THREE.OrbitControls( camera, renderer.domElement);
+                controls.target.set( 0, 0, 0 );
+                controls.update();
+
+               // renderer.render( scene, camera )
+
+
+                              
+               // gui.add(props, 'cfmivis').name('Callosum Forceps Minor');
+               // gui.add(props, 'arcvis').name('Arcuate Fasiculus');
+               // gui.add(props, 'ccvis').name('Cingulate Cingulum');
+               // gui.add(props, 'chvis').name('Cingulate Hippocampus');
+            
+            }
+
+            function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            }
+
+            function render() {
+                renderer.render( scene, camera );
+            }
+
+            function animate() {
+                requestAnimationFrame( animate );
+                
+                render();
+
+                // if ( implode ) {
+                //     TweenIn.update();
+                // }
+
+                // if ( explode ) {
+                //     TweenOut.update();
+                // }
+                
+            }
+
+            // function tweenSetUp() {
+            //     //tween outs
+            //     var cfma_epos = { x: 0, y: -142, z: 0 };
+            //     //var 
+
+            //     var TweenOut = new TWEEN.Group();
+
+            //     var cfma_tweenout = new TWEEN.Tween(cfma.position, TweenOut)
+            //         .to(cfma_epos, 500);
+
+            //     // var cfmi_tweenout = new TWEEN.Tween(cfmi.position, TweenOut).to(cfmi_epos, 500);
+            //     // var larc_tweenout = new TWEEN.Tween(larc.position, TweenOut).to(larc_epos, 500);
+            //     // var lcc_tweenout = new TWEEN.Tween(lcc.position, TweenOut).to(lcc_epos, 500);
+            //     // var lch_tweenout = new TWEEN.Tween(lch.position, TweenOut).to(lch_epos, 500);
+            //     // var lslf_tweenout = new TWEEN.Tween(lslf.position, TweenOut).to(lslf_epos, 500);
+            //     // var lifof_tweenout = new TWEEN.Tween(lifof.position, TweenOut).to(lifof_epos, 500);
+            //     // var lilf_tweenout = new TWEEN.Tween(lilf.position, TweenOut).to(lilf_epos, 500);
+            //     // var ltr_tweenout = new TWEEN.Tween(ltr.position, TweenOut).to(ltr_epos, 500);
+            //     // var lu_tweenout = new TWEEN.Tween(lu.position, TweenOut).to(lu_epos, 500);
+            //     // var rarc_tweenout = new TWEEN.Tween(rarc.position, TweenOut).to(rarc_epos, 500);
+            //     // var rcc_tweenout = new TWEEN.Tween(rcc.position, TweenOut).to(rcc_epos, 500);
+            //     // var rch_tweenout = new TWEEN.Tween(rch.position, TweenOut).to(rch_epos, 500);
+            //     // var rslf_tweenout = new TWEEN.Tween(rslf.position, TweenOut).to(rslf_epos, 500);
+            //     // var rifof_tweenout = new TWEEN.Tween(rifof.position, TweenOut).to(rifof_epos, 500);
+            //     // var rilf_tweenout = new TWEEN.Tween(rilf.position, TweenOut).to(rilf_epos, 500);
+            //     // var rtr_tweenout = new TWEEN.Tween(rtr.position, TweenOut).to(rtr_epos, 500);
+            //     // var ru_tweenout = new TWEEN.Tween(ru.position, TweenOut).to(ru_epos, 500);
+
+            //     //tween ins
+            //     // var opos = { x: 0, y: 0, z: 0 }
+            //     // var TweenIn = new TWEEN.Group();
+            //     // var cfma_tweenin = new TWEEN.Tween(cfma.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var cfmi_tweenin = new TWEEN.Tween(cfmi.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var larc_tweenin = new TWEEN.Tween(larc.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var lcc_tweenin = new TWEEN.Tween(lcc.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var lch_tweenin = new TWEEN.Tween(lch.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var lslf_tweenin = new TWEEN.Tween(lslf.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var lifof_tweenin = new TWEEN.Tween(lifof.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var lilf_tweenin = new TWEEN.Tween(lilf.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var ltr_tweenin = new TWEEN.Tween(ltr.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var lu_tweenin = new TWEEN.Tween(lu.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var rarc_tweenin = new TWEEN.Tween(rarc.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var rcc_tweenin = new TWEEN.Tween(rcc.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var rch_tweenin = new TWEEN.Tween(rch.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var rslf_tweenin = new TWEEN.Tween(rslf.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var rifof_tweenin = new TWEEN.Tween(rifof.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var rilf_tweenin = new TWEEN.Tween(rilf.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var rtr_tweenin = new TWEEN.Tween(rtr.position, TweenIn)
+            //     //     .to(opos, 500);
+            //     // var ru_tweenin = new TWEEN.Tween(ru.position, TweenIn)
+            //     //     .to(opos, 500);
+            // }
+            
+            // // function implode_meshes() {
+            
+            // // implode = true;
+            // // explode = false;
+
+            // // cfma_tweenin.start();
+            // // cfmi_tweenin.start();
+            // // larc_tweenin.start();
+            // // lcc_tweenin.start();
+            // // lch_tweenin.start();
+            // // lslf_tweenin.start();
+            // // lifof_tweenin.start();
+            // // lilf_tweenin.start();
+            // // ltr_tweenin.start();
+            // // lu_tweenin.start();
+            // // rarc_tweenin.start();
+            // // rcc_tweenin.start();
+            // // rch_tweenin.start();
+            // // rslf_tweenin.start();
+            // // rifof_tweenin.start();
+            // // rilf_tweenin.start();
+            // // rtr_tweenin.start();
+            // // ru_tweenin.start();
+            // // }
+
+            // explodeButton.onclick = function explode_meshes() {
+            
+            // implode = false;
+            // explode = true;
+
+            // cfma_tweenout.start();
+
+            // }
+            
+
+            
+         
+
+
+            </script>
+        
+    </body>
+</html>
