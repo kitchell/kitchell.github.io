@@ -404,7 +404,7 @@ ol {
 
 .portfolio-filter {
   list-style: none;
-  padding-bottom: 100px;
+  padding-bottom: 20px;
 }
 
 .portfolio-filter li {
@@ -431,7 +431,7 @@ ol {
 .portfolio-item {
   display: block;
   width: 100%;
-  height: 600px;
+  height: 400px;
   background-position: center center;
   position: relative;
   margin-bottom: 30px;
@@ -451,10 +451,12 @@ ol {
 
 .portfolio-item .pi-inner h2 {
   opacity: 0;
-  font-size: 30px;
+  font-size: 22px;
   font-weight: 400;
   position: absolute;
-  left: 50px;
+  text-align: center;
+  width: 90%;
+  left: 5%;
   bottom: 50px;
   color: #fff;
   letter-spacing: 10px;
