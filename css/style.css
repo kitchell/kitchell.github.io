@@ -460,9 +460,11 @@ ol {
   bottom: 50px;
   color: #fff;
   letter-spacing: 10px;
+/*
   -webkit-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
   transition: all 0.3s ease 0s;
+*/
 }
 
 .portfolio-item:hover .pi-inner {
