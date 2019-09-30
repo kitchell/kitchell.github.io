@@ -422,7 +422,10 @@ ol {
 
 .portfolios-area .gallery-block {
   padding: 0;
-  text-align: center;
+}
+
+.portfolios-area {
+  margin: 0 auto;
 }
 
 .gallery-block {
